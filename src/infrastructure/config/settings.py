@@ -15,6 +15,13 @@ class Settings(BaseSettings):
         default="redis://localhost:6379",
         description="Redis connection URL"
     )
+    redis_host: str = Field(default="localhost", description="Redis host")
+    redis_port: int = Field(default=6379, description="Redis port")
+    redis_db: int = Field(default=0, description="Redis database number")
+    redis_password: Optional[str] = Field(default=None, description="Redis password")
+    redis_max_connections: int = Field(default=20, description="Redis max connections")
+    redis_socket_timeout: int = Field(default=5, description="Redis socket timeout")
+    redis_socket_connect_timeout: int = Field(default=5, description="Redis socket connect timeout")
     
     # Security
     secret_key: str = Field(

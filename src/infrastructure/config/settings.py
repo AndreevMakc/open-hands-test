@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
@@ -74,6 +74,41 @@ class Settings(BaseSettings):
     
     # Authentication (optional for internal installations)
     auth_enabled: bool = Field(default=True, description="Enable authentication")
+    
+    # JWT Authentication Settings
+    secret_key: str = Field(
+        default="your-secret-key-change-in-production-please-use-strong-key",
+        description="Secret key for JWT token signing"
+    )
+    algorithm: str = Field(default="HS256", description="JWT algorithm")
+    access_token_expire_minutes: int = Field(
+        default=30, 
+        description="Access token expiration time in minutes"
+    )
+    refresh_token_expire_days: int = Field(
+        default=7,
+        description="Refresh token expiration time in days"
+    )
+    
+    # Password Settings
+    password_min_length: int = Field(default=8, description="Minimum password length")
+    password_require_uppercase: bool = Field(default=True, description="Require uppercase in password")
+    password_require_lowercase: bool = Field(default=True, description="Require lowercase in password")
+    password_require_numbers: bool = Field(default=True, description="Require numbers in password")
+    password_require_special: bool = Field(default=True, description="Require special characters in password")
+    
+    # Security Settings
+    allowed_origins: List[str] = Field(
+        default=["http://localhost:3000", "http://localhost:8000"],
+        description="Allowed CORS origins"
+    )
+    rate_limit_requests: int = Field(default=100, description="Rate limit requests per minute")
+    rate_limit_window: int = Field(default=60, description="Rate limit window in seconds")
+    
+    # Session Settings
+    session_timeout_minutes: int = Field(default=60, description="Session timeout in minutes")
+    max_login_attempts: int = Field(default=5, description="Maximum login attempts before lockout")
+    lockout_duration_minutes: int = Field(default=15, description="Account lockout duration in minutes")
     
     class Config:
         env_file = ".env"

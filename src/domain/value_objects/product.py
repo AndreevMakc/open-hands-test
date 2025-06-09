@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 class ProductStatus(str, Enum):
     """Product status enumeration"""
+    DRAFT = "draft"
     ACTIVE = "active"
     INACTIVE = "inactive"
     ARCHIVED = "archived"

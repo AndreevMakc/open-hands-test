@@ -1,7 +1,8 @@
 from uuid import UUID, uuid4
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field
+import re
+from pydantic import BaseModel, Field, validator
 
 
 class EntityId(BaseModel):
@@ -10,6 +11,24 @@ class EntityId(BaseModel):
     
     def __str__(self) -> str:
         return str(self.value)
+    
+    def __hash__(self) -> int:
+        return hash(self.value)
+
+
+class Slug(BaseModel):
+    """Value object for URL slugs"""
+    value: str = Field(..., min_length=1, max_length=255, description="URL slug")
+    
+    @validator('value')
+    def validate_slug(cls, v):
+        """Validate slug format"""
+        if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', v):
+            raise ValueError('Slug must contain only lowercase letters, numbers, and hyphens')
+        return v
+    
+    def __str__(self) -> str:
+        return self.value
     
     def __hash__(self) -> int:
         return hash(self.value)

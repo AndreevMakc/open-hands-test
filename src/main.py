@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .infrastructure.config.settings import settings
 from .infrastructure.database.connection import init_database, close_database
 from .presentation.api.v1.categories import router as categories_router
+from .presentation.api.v1.products import router as products_router
+from .presentation.api.v1.attributes import router as attributes_router
 
 
 @asynccontextmanager
@@ -41,6 +43,8 @@ def create_app() -> FastAPI:
     
     # Include API routers
     app.include_router(categories_router, prefix=settings.api_v1_prefix)
+    app.include_router(products_router, prefix=settings.api_v1_prefix)
+    app.include_router(attributes_router, prefix=settings.api_v1_prefix)
     
     # Health check endpoint
     @app.get("/health")
